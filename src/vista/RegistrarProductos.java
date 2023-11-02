@@ -12,11 +12,7 @@ public class RegistrarProductos extends javax.swing.JPanel {
 
     public RegistrarProductos() {
         initComponents();
-        initComponents();
-        desactivarCampos();
-        jBEliminar.setEnabled(false);
-        jBModificar.setEnabled(false);
-        jBGuardar.setEnabled(false);
+        tareaConstructor();
     }
 
 	
@@ -41,6 +37,8 @@ public class RegistrarProductos extends javax.swing.JPanel {
         jBSalir = new javax.swing.JButton();
         jBuscar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jRActivo = new javax.swing.JRadioButton();
+        jRInactivo = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(157, 196, 162));
         setPreferredSize(new java.awt.Dimension(734, 564));
@@ -153,6 +151,28 @@ public class RegistrarProductos extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("MV Boli", 1, 36)); // NOI18N
         jLabel2.setText("Registrar Productos");
 
+        jRActivo.setFont(new java.awt.Font("SimSun", 1, 18)); // NOI18N
+        jRActivo.setText("Producto activo");
+        jRActivo.setContentAreaFilled(false);
+        jRActivo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jRActivo.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jRActivo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRActivoMouseClicked(evt);
+            }
+        });
+
+        jRInactivo.setFont(new java.awt.Font("SimSun", 1, 18)); // NOI18N
+        jRInactivo.setText("Producto inactivo");
+        jRInactivo.setContentAreaFilled(false);
+        jRInactivo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jRInactivo.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jRInactivo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRInactivoMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,11 +215,15 @@ public class RegistrarProductos extends javax.swing.JPanel {
                                             .addGap(35, 35, 35)
                                             .addComponent(jBEliminar)))))
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLIdProducto)))
+                            .addComponent(jLIdProducto)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jRActivo, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(72, 72, 72)
+                                .addComponent(jRInactivo))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(131, 131, 131)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,6 +248,10 @@ public class RegistrarProductos extends javax.swing.JPanel {
                     .addComponent(jTStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRActivo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jRInactivo, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLIdProducto)
                     .addComponent(jTIdProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBuscar))
@@ -235,22 +263,18 @@ public class RegistrarProductos extends javax.swing.JPanel {
                         .addComponent(jBEliminar)
                         .addComponent(jBAgregar))
                     .addComponent(jBSalir))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
    private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
-      limpiar();
-      jBEliminar.setEnabled(false);
-      jBModificar.setEnabled(false);
-      activarCampos();
-      jBGuardar.setEnabled(true);
+       tareaAgregar();
    }//GEN-LAST:event_jBAgregarActionPerformed
 
    private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
       if (jTNombreProd.getText().isEmpty() || jTDescripcion.getText().isEmpty() || jTPrecioActual.getText().isEmpty() || jTStock.getText().isEmpty()) {
-
          JOptionPane.showMessageDialog(this, "No deje campos en blanco");
+         jTIdProd.setEditable(true);
          return;
       }
 
@@ -279,6 +303,7 @@ public class RegistrarProductos extends javax.swing.JPanel {
        try {
            double precioActual = Double.parseDouble(jTPrecioActual.getText());
            int stock = Integer.parseInt(jTStock.getText());
+           boolean estado = jRActivo.isSelected();
 
            ProductoData prodData = new ProductoData();
            Producto prod = prodData.buscarProducto(Integer.parseInt(jTIdProd.getText()));
@@ -286,9 +311,10 @@ public class RegistrarProductos extends javax.swing.JPanel {
            prod.setDescripcion(descripcion);
            prod.setPrecioActual(precioActual);
            prod.setStock(stock);
+           prod.setEstado(estado);
            prodData.modificarProducto(prod);
 
-           limpiar();
+           tareaFinalModificar();
        } catch (NumberFormatException ex) {
            JOptionPane.showMessageDialog(this, "Debe ingresar números en el campo 'Precio Actual'");
        }
@@ -299,6 +325,8 @@ public class RegistrarProductos extends javax.swing.JPanel {
          int idProducto = Integer.parseInt(jTIdProd.getText());
          ProductoData pd = new ProductoData();
          pd.eliminarProducto(idProducto);
+         jRActivo.setSelected(false);
+         jRInactivo.setSelected(false);
       } catch (NullPointerException ex) {
          JOptionPane.showMessageDialog(this, "Ingrese un ID válido");
       } catch (NumberFormatException ex){
@@ -308,37 +336,47 @@ public class RegistrarProductos extends javax.swing.JPanel {
    }//GEN-LAST:event_jBEliminarActionPerformed
                                            
     private void jBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBuscarActionPerformed
-        activarCampos();  
-        jBEliminar.setEnabled(true);
-        jBModificar.setEnabled(true);
-        jBGuardar.setEnabled(false);
+        tareaInicialBuscar();
+        String idProductoText = jTIdProd.getText();
         try {
             int idProducto = Integer.parseInt(jTIdProd.getText());
             ProductoData pd = new ProductoData();
             Producto producto = pd.buscarProducto(idProducto);
+            System.out.println(producto);
             
             jTNombreProd.setText(producto.getNombreProducto());
             jTDescripcion.setText(producto.getDescripcion());
             jTPrecioActual.setText(""+producto.getPrecioActual());
             jTStock.setText(""+producto.getStock());
+           if (producto.isEstado()) {
+                jRActivo.setSelected(true);
+                jRInactivo.setSelected(false);
+            } else {
+                jRInactivo.setSelected(true);
+                jRActivo.setSelected(false);
+            }
         }catch(NullPointerException ex){
-            JOptionPane.showMessageDialog(this, "No existe el producto");
-            limpiar();
-            desactivarCampos();
-            jBEliminar.setEnabled(false);
-            jBModificar.setEnabled(false);
+            JOptionPane.showMessageDialog(this, "No existe el producto con id :"+ idProductoText);
+            tareaBuscar();
+            return;
         }catch (NumberFormatException ex){
-            JOptionPane.showMessageDialog(null, "Error en el campo IDProducto. Ingrese solo numeros");
-            limpiar();
-            desactivarCampos();
-            jBEliminar.setEnabled(false);
-            jBModificar.setEnabled(false);
+            JOptionPane.showMessageDialog(null, "Error en el campo IDProducto. Datos ingresados incorrectos");
+            tareaBuscar();
+            return;
         }
     }//GEN-LAST:event_jBuscarActionPerformed
 
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jBSalirActionPerformed
+
+    private void jRInactivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRInactivoMouseClicked
+        jRActivo.setSelected(false);
+    }//GEN-LAST:event_jRInactivoMouseClicked
+
+    private void jRActivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRActivoMouseClicked
+        jRInactivo.setSelected(false);
+    }//GEN-LAST:event_jRActivoMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -354,6 +392,8 @@ public class RegistrarProductos extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JRadioButton jRActivo;
+    private javax.swing.JRadioButton jRInactivo;
     private javax.swing.JTextField jTDescripcion;
     private javax.swing.JTextField jTIdProd;
     private javax.swing.JTextField jTNombreProd;
@@ -384,8 +424,58 @@ public class RegistrarProductos extends javax.swing.JPanel {
         jTStock.setEnabled(false);
 
     }
+    
+    private void desactivarRadioActivado() {
+        if (jRActivo.isSelected()) {
+            jRActivo.setSelected(false);
+        } else if (jRInactivo.isSelected()) {
+            jRInactivo.setSelected(false);
+        }
+    }
 
-//	private void dispose() {
-//		throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//	}
+    private void tareaBuscar() {
+        limpiar();
+        desactivarCampos();
+        jBEliminar.setEnabled(false);
+        jBModificar.setEnabled(false);
+        desactivarRadioActivado();
+    }
+    
+    private void tareaConstructor() {
+        desactivarCampos();
+        jBEliminar.setEnabled(false);
+        jBModificar.setEnabled(false);
+        jBGuardar.setEnabled(false);
+    }
+    
+    private void tareaAgregar(){
+        jTIdProd.setEditable(false);
+        limpiar();
+        jBEliminar.setEnabled(false);
+        jBModificar.setEnabled(false);
+        activarCampos();
+        jBGuardar.setEnabled(true);
+        jRActivo.setEnabled(false);
+        jRInactivo.setEnabled(false);
+        desactivarRadioActivado();
+    }
+    
+    private void tareaFinalModificar(){
+        limpiar();
+        jRActivo.setSelected(false);
+        jRInactivo.setSelected(false);
+    }
+
+    private void tareaInicialBuscar() {
+        activarCampos();
+        jBEliminar.setEnabled(true);
+        jBModificar.setEnabled(true);
+        jBGuardar.setEnabled(false);
+        if (!jRActivo.isEnabled()) {
+            jRActivo.setEnabled(true);
+        }
+        if (!jRInactivo.isEnabled()) {
+            jRInactivo.setEnabled(true);
+        }
+    }
 }

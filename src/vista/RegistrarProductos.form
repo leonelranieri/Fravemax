@@ -35,7 +35,7 @@
                                       <Component id="jLabel4" alignment="0" min="-2" pref="120" max="-2" attributes="0"/>
                                       <Component id="jLabel5" alignment="0" min="-2" pref="143" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="67" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jTPrecioActual" min="-2" pref="100" max="-2" attributes="0"/>
                                       <Component id="jTDescripcion" min="-2" pref="394" max="-2" attributes="0"/>
@@ -75,6 +75,11 @@
                           </Group>
                           <Component id="jLabel7" alignment="0" min="-2" pref="58" max="-2" attributes="0"/>
                           <Component id="jLIdProducto" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jRActivo" min="-2" pref="192" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
+                              <Component id="jRInactivo" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -82,7 +87,7 @@
                       <Component id="jLabel2" min="-2" pref="387" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="58" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -113,6 +118,11 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jRActivo" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                  <Component id="jRInactivo" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLIdProducto" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jTIdProd" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jBuscar" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -127,7 +137,7 @@
                   </Group>
                   <Component id="jBSalir" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="82" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -346,6 +356,38 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Registrar Productos"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="jRActivo">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="SimSun" size="18" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Producto activo"/>
+        <Property name="contentAreaFilled" type="boolean" value="false"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Cursor Por defecto"/>
+        </Property>
+        <Property name="horizontalTextPosition" type="int" value="2"/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jRActivoMouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="jRInactivo">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="SimSun" size="18" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Producto inactivo"/>
+        <Property name="contentAreaFilled" type="boolean" value="false"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Cursor Por defecto"/>
+        </Property>
+        <Property name="horizontalTextPosition" type="int" value="2"/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jRInactivoMouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

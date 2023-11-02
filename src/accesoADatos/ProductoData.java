@@ -39,7 +39,7 @@ public class ProductoData {
     }
 
     public void modificarProducto(Producto producto) {
-        String sql = "UPDATE producto SET nombreProducto = ?, descripcion = ?, precioActual = ?, stock = ?"
+        String sql = "UPDATE producto SET nombreProducto = ?, descripcion = ?, precioActual = ?, stock = ?, estado = ?"
                 + " WHERE idProducto = ?";
         
         try {
@@ -48,7 +48,8 @@ public class ProductoData {
             ps.setString(2, producto.getDescripcion());
             ps.setDouble(3, producto.getPrecioActual());
             ps.setInt(4, producto.getStock());
-            ps.setInt(5, producto.getIdProducto());
+            ps.setBoolean(5, producto.isEstado());
+            ps.setInt(6, producto.getIdProducto());
             int exito = ps.executeUpdate();
             if (exito == 1) {
                 JOptionPane.showMessageDialog(null, "Producto modificado");
@@ -160,7 +161,7 @@ public class ProductoData {
                 prod.setDescripcion(result.getString("descripcion"));
                 prod.setPrecioActual(result.getDouble("precioActual"));
                 prod.setStock(result.getInt("stock"));
-                prod.setEstado(true);
+                prod.setEstado(result.getBoolean("estado"));
             }
             ps.close();
         } catch (SQLException ex) {

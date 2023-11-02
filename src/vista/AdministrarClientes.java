@@ -11,9 +11,7 @@ public class AdministrarClientes extends javax.swing.JPanel {
 	public AdministrarClientes() {
         initComponents();
         desactivarCampos();
-        jBEliminar.setEnabled(false);
-        jBModificar.setEnabled(false);
-        jBGuardar.setEnabled(false);
+        botonesEMGFalse();
     }
 
 	
@@ -275,16 +273,8 @@ public class AdministrarClientes extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
    private void jBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBuscarActionPerformed
-      jBGuardar.setEnabled(false);
-      activarCampos();
-      jBEliminar.setEnabled(true);
-      jBModificar.setEnabled(true);
-      if(!jRActivo.isEnabled()){
-          jRActivo.setEnabled(true);
-      }
-      if(!jRInactivo.isEnabled()){
-          jRInactivo.setEnabled(true);
-      }
+      tareaInicialEnBuscar();
+      tareaConRadioEnBuscar();
 
       try {
          int idCliente = Integer.parseInt(jTBuscarid.getText());
@@ -296,6 +286,8 @@ public class AdministrarClientes extends javax.swing.JPanel {
               jBEliminar.setEnabled(false);
               jBModificar.setEnabled(false);
               limpiar();
+              desactivarRadioActivado();
+              return;
           }
          jTNombre.setText(cliente.getNombre());
          jTApellido.setText(cliente.getApellido());
@@ -308,16 +300,9 @@ public class AdministrarClientes extends javax.swing.JPanel {
               jRInactivo.setSelected(true);
               jRActivo.setSelected(false);
           }
-
-      /*}catch(NullPointerException ex){
-         JOptionPane.showMessageDialog(this, "Ingrese un ID válido");*/
-
       }catch (NumberFormatException ex){
-         JOptionPane.showMessageDialog(null, "Error en el campo IDCliente. Ingrese solo numeros");
-          desactivarCampos();
-          jBEliminar.setEnabled(false);
-          jBModificar.setEnabled(false);
-          limpiar();
+         JOptionPane.showMessageDialog(null, "Error en el campo IDCliente. Datos incorrectos");
+         tareaCatchBuscar();
       }
    }//GEN-LAST:event_jBuscarActionPerformed
 
@@ -335,14 +320,12 @@ public class AdministrarClientes extends javax.swing.JPanel {
          jRInactivo.setSelected(false);
       } catch (NullPointerException ex) {
          JOptionPane.showMessageDialog(this, "Ingrese un ID válido");
-
       }
       limpiar();
    }//GEN-LAST:event_jBEliminarActionPerformed
 
    private void jBModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBModificarActionPerformed
       if (jTNombre.getText().isEmpty() || jTApellido.getText().isEmpty() || jTDire.getText().isEmpty() || jTelefono.getText().isEmpty()) {
-
          JOptionPane.showMessageDialog(this, "No deje campos en blanco");
          return;
       }
@@ -362,16 +345,14 @@ public class AdministrarClientes extends javax.swing.JPanel {
       cliente.setEstado(estado);
       clientedata.modificarCliente(cliente);
 
-      limpiar();
-      jRActivo.setSelected(false);
-      jRInactivo.setSelected(false);
+      tareaFinalModificar();
    }//GEN-LAST:event_jBModificarActionPerformed
 
    private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
 
       if (jTNombre.getText().isEmpty() || jTApellido.getText().isEmpty() || jTDire.getText().isEmpty() || jTelefono.getText().isEmpty()) {
-
          JOptionPane.showMessageDialog(this, "No deje campos en blanco");
+         jTBuscarid.setEditable(true);
          return;
       }
 
@@ -384,26 +365,11 @@ public class AdministrarClientes extends javax.swing.JPanel {
       ClienteData clientedata = new ClienteData();
       clientedata.registrarCliente(cliente);
 
-      limpiar();
-      jTBuscarid.setEditable(true);
-      jBGuardar.setEnabled(false);
+      tareaFinalGuardar();
    }//GEN-LAST:event_jBGuardarActionPerformed
 
    private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
-      limpiar();
-      jBEliminar.setEnabled(false);
-      jBModificar.setEnabled(false);
-      activarCampos();
-      jBGuardar.setEnabled(true);
-      jRActivo.setEnabled(false);
-      jRInactivo.setEnabled(false);
-       if (jRActivo.isSelected()) {
-           jRActivo.setSelected(false);
-       }
-       if (jRInactivo.isSelected()) {
-           jRInactivo.setSelected(false);
-       }
-
+      tareaAgregar();
    }//GEN-LAST:event_jBAgregarActionPerformed
 
     private void jRActivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRActivoMouseClicked
@@ -460,5 +426,64 @@ private void limpiar() {
 
     }
 
+    private void botonesEMGFalse() {
+        jBEliminar.setEnabled(false);
+        jBModificar.setEnabled(false);
+        jBGuardar.setEnabled(false);
+    }
+    
+    private void tareaInicialEnBuscar() {
+        jBGuardar.setEnabled(false);
+        activarCampos();
+        jBEliminar.setEnabled(true);
+        jBModificar.setEnabled(true);
+    }
 
+    private void tareaConRadioEnBuscar() {
+        if (!jRActivo.isEnabled()) {
+            jRActivo.setEnabled(true);
+        }
+        if (!jRInactivo.isEnabled()) {
+            jRInactivo.setEnabled(true);
+        }
+    }
+    
+    private void desactivarRadioActivado() {
+        if (jRActivo.isSelected()) {
+            jRActivo.setSelected(false);
+        } else if (jRInactivo.isSelected()) {
+            jRInactivo.setSelected(false);
+        }
+    }
+    
+    private void tareaCatchBuscar() {
+        desactivarCampos();
+        jBEliminar.setEnabled(false);
+        jBModificar.setEnabled(false);
+        limpiar();
+    }
+    
+    private void tareaFinalModificar() {
+        limpiar();
+        jRActivo.setSelected(false);
+        jRInactivo.setSelected(false);
+    }
+    
+    private void tareaFinalGuardar() {
+        limpiar();
+        jTBuscarid.setEditable(true);
+        jBGuardar.setEnabled(false);
+    }
+    
+    private void tareaAgregar() {
+        jTBuscarid.setEditable(false);
+        limpiar();
+        jBEliminar.setEnabled(false);
+        jBModificar.setEnabled(false);
+        activarCampos();
+        jBGuardar.setEnabled(true);
+        jRActivo.setEnabled(false);
+        jRInactivo.setEnabled(false);
+        desactivarRadioActivado();
+    }
 }
