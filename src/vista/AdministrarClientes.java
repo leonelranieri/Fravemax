@@ -20,10 +20,10 @@ public class AdministrarClientes extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTNombre = new javax.swing.JTextField();
+        jTApellido = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTApellido = new javax.swing.JTextField();
+        JTNombre = new javax.swing.JTextField();
         jTDire = new javax.swing.JTextField();
         jTelefono = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -221,9 +221,9 @@ public class AdministrarClientes extends javax.swing.JPanel {
                         .addGap(65, 65, 65)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTDire, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jTApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -233,12 +233,12 @@ public class AdministrarClientes extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
@@ -289,8 +289,8 @@ public class AdministrarClientes extends javax.swing.JPanel {
               desactivarRadioActivado();
               return;
           }
-         jTNombre.setText(cliente.getNombre());
-         jTApellido.setText(cliente.getApellido());
+         jTApellido.setText(cliente.getNombre());
+         JTNombre.setText(cliente.getApellido());
          jTDire.setText(cliente.getDomicilio());
          jTelefono.setText(cliente.getTelefono());
           if (cliente.isEstado()) {
@@ -325,13 +325,13 @@ public class AdministrarClientes extends javax.swing.JPanel {
    }//GEN-LAST:event_jBEliminarActionPerformed
 
    private void jBModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBModificarActionPerformed
-      if (jTNombre.getText().isEmpty() || jTApellido.getText().isEmpty() || jTDire.getText().isEmpty() || jTelefono.getText().isEmpty()) {
+      if (jTApellido.getText().isEmpty() || JTNombre.getText().isEmpty() || jTDire.getText().isEmpty() || jTelefono.getText().isEmpty()) {
          JOptionPane.showMessageDialog(this, "No deje campos en blanco");
          return;
       }
 
-      String nombre = jTNombre.getText();
-      String apellido = jTApellido.getText();
+      String nombre = jTApellido.getText();
+      String apellido = JTNombre.getText();
       String direccion = jTDire.getText();
       String telefono = jTelefono.getText();
       boolean estado = jRActivo.isSelected();
@@ -349,23 +349,37 @@ public class AdministrarClientes extends javax.swing.JPanel {
    }//GEN-LAST:event_jBModificarActionPerformed
 
    private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
+       if (jTApellido.getText().isEmpty() || JTNombre.getText().isEmpty() || jTDire.getText().isEmpty() || jTelefono.getText().isEmpty()) {
+           JOptionPane.showMessageDialog(this, "No deje campos en blanco");
+           jTBuscarid.setEditable(true);
+           return;
+       }
 
-      if (jTNombre.getText().isEmpty() || jTApellido.getText().isEmpty() || jTDire.getText().isEmpty() || jTelefono.getText().isEmpty()) {
-         JOptionPane.showMessageDialog(this, "No deje campos en blanco");
-         jTBuscarid.setEditable(true);
-         return;
-      }
+       String nombre = JTNombre.getText();
+       String apellido = jTApellido.getText();
+       String direccion = jTDire.getText();
+       String telefono = jTelefono.getText();
 
-      String nombre = jTNombre.getText();
-      String apellido = jTApellido.getText();
-      String direccion = jTDire.getText();
-      String telefono = jTelefono.getText();
+       if (!validarCamposString(apellido)) {
+           JOptionPane.showMessageDialog(this, "El apellido no debe contener números ni carácteres especiales");
+           return;
+       }
 
-      Cliente cliente = new Cliente(nombre, apellido, direccion, telefono, true);
-      ClienteData clientedata = new ClienteData();
-      clientedata.registrarCliente(cliente);
+       if (!validarCamposString(nombre)) {
+           JOptionPane.showMessageDialog(this, "El nombre no debe contener números ni carácteres especiales");
+           return;
+       }
 
-      tareaFinalGuardar();
+       if (!validarCampoNumerico(telefono)) {
+           JOptionPane.showMessageDialog(this, "El campo teléfono solo debe contener números");
+           return;
+       }
+
+       Cliente cliente = new Cliente(nombre, apellido, direccion, telefono, true);
+       ClienteData clientedata = new ClienteData();
+       clientedata.registrarCliente(cliente);
+
+       tareaFinalGuardar();
    }//GEN-LAST:event_jBGuardarActionPerformed
 
    private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
@@ -382,6 +396,7 @@ public class AdministrarClientes extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField JTNombre;
     private javax.swing.JButton jBAgregar;
     private javax.swing.JButton jBEliminar;
     private javax.swing.JButton jBGuardar;
@@ -399,28 +414,26 @@ public class AdministrarClientes extends javax.swing.JPanel {
     private javax.swing.JTextField jTApellido;
     private javax.swing.JTextField jTBuscarid;
     private javax.swing.JTextField jTDire;
-    private javax.swing.JTextField jTNombre;
     private javax.swing.JTextField jTelefono;
     // End of variables declaration//GEN-END:variables
 private void limpiar() {
-        jTNombre.setText("");
         jTApellido.setText("");
+        JTNombre.setText("");
         jTDire.setText("");
         jTelefono.setText("");
         jTBuscarid.setText("");
-        
     }
 
     private void activarCampos() {
-        jTNombre.setEnabled(true);
         jTApellido.setEnabled(true);
+        JTNombre.setEnabled(true);
         jTDire.setEnabled(true);
         jTelefono.setEnabled(true);
     }
 
     private void desactivarCampos() {
-        jTNombre.setEnabled(false);
         jTApellido.setEnabled(false);
+        JTNombre.setEnabled(false);
         jTDire.setEnabled(false);
         jTelefono.setEnabled(false);
 
@@ -485,5 +498,22 @@ private void limpiar() {
         jRActivo.setEnabled(false);
         jRInactivo.setEnabled(false);
         desactivarRadioActivado();
+    }
+    
+    private boolean validarCamposString(String cadena) {
+        // Validación para asegurarse de que el nombre y el apellido no contengan números
+        if (cadena.matches(".*[^a-zA-Z\\s].*")) {
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean validarCampoNumerico(String telefono) {
+        // Validación para asegurarse de que el número de teléfono solo contenga números
+        if (!telefono.matches("[0-9]+")) {
+            return false;
+
+        }
+        return true;
     }
 }
