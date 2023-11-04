@@ -336,6 +336,21 @@ public class AdministrarClientes extends javax.swing.JPanel {
       String telefono = jTelefono.getText();
       boolean estado = jRActivo.isSelected();
       ClienteData clientedata = new ClienteData();
+      
+       if (!validarCamposString(apellido)) {
+           JOptionPane.showMessageDialog(this, "El apellido no debe contener números ni carácteres especiales");
+           return;
+       }
+
+       if (!validarCamposString(nombre)) {
+           JOptionPane.showMessageDialog(this, "El nombre no debe contener números ni carácteres especiales");
+           return;
+       }
+
+       if (!validarCampoNumerico(telefono)) {
+           JOptionPane.showMessageDialog(this, "El campo teléfono solo debe contener números");
+           return;
+       }
 
       Cliente cliente = clientedata.buscarCliente(Integer.parseInt(jTBuscarid.getText()));
       cliente.setNombre(nombre);
@@ -508,9 +523,9 @@ private void limpiar() {
         return true;
     }
     
-    private boolean validarCampoNumerico(String telefono) {
+    private boolean validarCampoNumerico(String num) {
         // Validación para asegurarse de que el número de teléfono solo contenga números
-        if (!telefono.matches("[0-9]+")) {
+        if (!num.matches("[0-9]+")) {
             return false;
 
         }

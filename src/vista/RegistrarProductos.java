@@ -272,24 +272,38 @@ public class RegistrarProductos extends javax.swing.JPanel {
    }//GEN-LAST:event_jBAgregarActionPerformed
 
    private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
-      if (jTNombreProd.getText().isEmpty() || jTDescripcion.getText().isEmpty() || jTPrecioActual.getText().isEmpty() || jTStock.getText().isEmpty()) {
-         JOptionPane.showMessageDialog(this, "No deje campos en blanco");
-         jTIdProd.setEditable(true);
-         return;
-      }
+       if (jTNombreProd.getText().isEmpty() || jTDescripcion.getText().isEmpty() || jTPrecioActual.getText().isEmpty() || jTStock.getText().isEmpty()) {
+           JOptionPane.showMessageDialog(this, "No deje campos en blanco");
+           jTIdProd.setEditable(true);
+           return;
+       }
 
-      String nombreProd = jTNombreProd.getText();
-      String descripcion = jTDescripcion.getText();
-      double precioActual = Double.parseDouble(jTPrecioActual.getText());
-      int stock = Integer.parseInt(jTStock.getText());
+       String nombreProd = jTNombreProd.getText();
+       String descripcion = jTDescripcion.getText();
 
-      Producto prod = new Producto(nombreProd, descripcion, precioActual, stock, true);
-      ProductoData prodData = new ProductoData();
-      prodData.registrarProducto(prod);
+       if (!validarCamposString(nombreProd)) {
+           JOptionPane.showMessageDialog(this, "El nombre no debe contener números ni caracteres especiales");
+           return;
+       }
 
-      limpiar();
-      jTIdProd.setEditable(true);
+       if (!validarCampoNumericoDouble(jTPrecioActual.getText())) {
+           JOptionPane.showMessageDialog(this, "El campo precio actul solo debe contener números");
+           return;
+       }
 
+       if (!validarCampoNumericoInt(jTStock.getText())) {
+           JOptionPane.showMessageDialog(this, "El campo stock solo debe contener números");
+           return;
+       }
+       double precioActual = Double.parseDouble(jTPrecioActual.getText());
+       int stock = Integer.parseInt(jTStock.getText());
+
+       Producto prod = new Producto(nombreProd, descripcion, precioActual, stock, true);
+       ProductoData prodData = new ProductoData();
+       prodData.registrarProducto(prod);
+
+       limpiar();
+       jTIdProd.setEditable(true);
    }//GEN-LAST:event_jBGuardarActionPerformed
 
    private void jBModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBModificarActionPerformed
@@ -298,6 +312,20 @@ public class RegistrarProductos extends javax.swing.JPanel {
            JOptionPane.showMessageDialog(this, "No deje campos en blanco");
            return;
        }
+       if (!validarCamposString(jTNombreProd.getText())) {
+           JOptionPane.showMessageDialog(this, "El nombre no debe contener números ni caracteres especiales");
+           return;
+       }
+
+       if (!validarCampoNumericoDouble(jTPrecioActual.getText())) {
+           JOptionPane.showMessageDialog(this, "El campo precio actul solo debe contener números");
+           return;
+       }
+
+       if (!validarCampoNumericoInt(jTStock.getText())) {
+           JOptionPane.showMessageDialog(this, "El campo stock solo debe contener números");
+           return;
+       }       
        String nombreProd = jTNombreProd.getText();
        String descripcion = jTDescripcion.getText();
        try {
@@ -317,6 +345,9 @@ public class RegistrarProductos extends javax.swing.JPanel {
            tareaFinalModificar();
        } catch (NumberFormatException ex) {
            JOptionPane.showMessageDialog(this, "Debe ingresar números en el campo 'Precio Actual'");
+       }catch (NullPointerException np) {
+           JOptionPane.showMessageDialog(this, "No puede modificar el id");
+           return;
        }
    }//GEN-LAST:event_jBModificarActionPerformed
 
@@ -477,5 +508,30 @@ public class RegistrarProductos extends javax.swing.JPanel {
         if (!jRInactivo.isEnabled()) {
             jRInactivo.setEnabled(true);
         }
+    }
+    
+    private boolean validarCamposString(String cadena) {
+        // Validación para asegurarse de que el nombre y el apellido no contengan números
+        if (cadena.matches(".*[^a-zA-Z\\s].*")) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarCampoNumericoInt(String num) {
+        // Validación para asegurarse de que el número de teléfono solo contenga números
+        if (!num.matches("[0-9]+")) {
+            return false;
+
+        }
+        return true;
+    }
+ 
+    private boolean validarCampoNumericoDouble(String num) {
+        // Utiliza una expresión regular que permite números enteros o decimales
+        if (!num.matches("^[0-9]+(\\.[0-9]+)?$")) {
+            return false;
+        }
+        return true;
     }
 }
