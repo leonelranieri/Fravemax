@@ -41,10 +41,14 @@ public class DetalleVtaData {
                 ps.setDouble(3, precioTotal);
                 ps.setInt(4, prod.getIdProducto());
                 ps.executeUpdate();
+                ProductoData pd = new ProductoData();
+                Producto producto = pd.buscarProducto(prod.getIdProducto());
                 ResultSet resul = ps.getGeneratedKeys();
                 if (resul.next()) {
                     detalleVenta.setIdDetalleVenta(resul.getInt(1));
-                    JOptionPane.showMessageDialog(null, "Detalle registrado con éxito.");
+                    JOptionPane.showMessageDialog(null, "Detalle registrado con éxito: \n" 
+                        + "Código de Venta :"+detalleVenta.getVenta().getIdVenta()+"\n"
+                        + "Producto: "+producto.getNombreProducto()+" Cantidad :"+ocurrencias);
                 }
                 ps.close();
             } catch (SQLException e) {

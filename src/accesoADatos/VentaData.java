@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -31,10 +32,13 @@ public class VentaData {
             ps.setDate(2, Date.valueOf(venta.getFechaVenta()));
             ps.setBoolean(3, true);
             ps.executeUpdate();
+            String fechaArgentina = convertirFecha(venta.getFechaVenta());
             ResultSet resul = ps.getGeneratedKeys();
             if (resul.next()) {
                 venta.setIdVenta(resul.getInt(1));
-                JOptionPane.showMessageDialog(null, "Venta registrada con éxito.");
+                JOptionPane.showMessageDialog(null, "Venta registrada con éxito: \n" 
+                        + "Cliente :"+venta.getCliente().getApellido()+" "+ venta.getCliente().getNombre()+"\n"
+                        + "Fecha :"+fechaArgentina);
             }
             ps.close();
         } catch (SQLException e) {
@@ -166,6 +170,15 @@ public class VentaData {
         return ventas;
     }
     
+    private String convertirFecha(LocalDate fecha) {
+        // Obtén la fecha de venta como un objeto LocalDate
+        LocalDate fechaVenta = fecha;
+        // Crea un formateador con el patrón deseado (dd/MM/yyyy)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        // Formatea la fecha en el formato argentino
+        String fechaArgentina = fechaVenta.format(formatter);
+        return fechaArgentina;
+    }
 }
 
 

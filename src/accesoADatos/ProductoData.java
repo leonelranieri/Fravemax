@@ -69,9 +69,10 @@ public class ProductoData {
             ps.setInt(1, producto.getStock());
             ps.setInt(2, producto.getIdProducto());
             int exito = ps.executeUpdate();
-            //if (exito == 1) {
-                //JOptionPane.showMessageDialog(null, "Stock modificado");
-            //}
+            if (exito == 1) {
+                JOptionPane.showMessageDialog(null, "Se modifico el stock del producto :"+producto.getNombreProducto()+"\n"
+                        + "stock actual: "+producto.getStock());
+            }
             ps.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al modificar el producto en la base de datos.");
