@@ -165,7 +165,7 @@ public class DetalleDeVentas extends javax.swing.JPanel {
 
            for (Producto prod : hs) {
                DecimalFormat formato = new DecimalFormat("0.00");
-               int ocurrencias = dv.cantidadDeOcurrencias(prod);
+               int ocurrencias = dvd.cantidadDeOcurrencias(dv.getIdDetalleVenta());
                double precioProducto = ocurrencias * prod.getPrecioActual();
                precioTotal += precioProducto;
                modeloTabla.addRow(new Object[]{dv.getVenta().getIdVenta(), prod.getIdProducto(), ocurrencias, precioProducto});

@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class DetalleVtaData {
@@ -48,7 +50,8 @@ public class DetalleVtaData {
                     detalleVenta.setIdDetalleVenta(resul.getInt(1));
                     JOptionPane.showMessageDialog(null, "Detalle registrado con éxito: \n" 
                         + "Código de Venta :"+detalleVenta.getVenta().getIdVenta()+"\n"
-                        + "Producto: "+producto.getNombreProducto()+" Cantidad :"+ocurrencias);
+                        + "Producto: "+producto.getNombreProducto()+", precio por unidad: "+producto.getPrecioActual()
+                        +", cantidad: "+ocurrencias);
                 }
                 ps.close();
             } catch (SQLException e) {
@@ -58,26 +61,44 @@ public class DetalleVtaData {
     }
     
     public DetalleVenta buscarDetalle(int idVenta) {
-        String sql = "SELECT idProducto, cantidad, precioVenta FROM detalleventa WHERE idVenta=?";
+        String sql = "SELECT idDetalleVenta, idProducto, cantidad, precioVenta FROM detalleventa WHERE idVenta=?";
         DetalleVenta dv = null;
         List<Producto> productos = new ArrayList<>();
+        int idDetalle = 0;
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
             ps.setInt(1, idVenta);
             ResultSet result = ps.executeQuery();
             while (result.next()) {
+                idDetalle = result.getInt("idDetalleVenta");
                 ProductoData pd = new ProductoData();
                 Producto prod = pd.buscarProducto(result.getInt("idProducto"));
                 productos.add(prod);
             }
             VentaData vd = new VentaData();
             Venta venta = vd.buscarVenta(idVenta);
-            dv = new DetalleVenta(venta, productos);
+            dv = new DetalleVenta(idDetalle, venta, productos);
             ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Detalle Venta");
         }
         return dv;
+    }
+    
+    public int cantidadDeOcurrencias(int idDetalleVta) {
+        String sql ="SELECT cantidad FROM `detalleventa` WHERE idDetalleVenta=?";
+        int ocurrencias = 0;
+        try {
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, idDetalleVta);
+            ResultSet result = ps.executeQuery();
+            if(result.next()){
+                ocurrencias = result.getInt("cantidad");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla Detalle Venta");
+        }
+        return ocurrencias;
     }
 
 }

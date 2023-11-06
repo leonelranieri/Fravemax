@@ -28,6 +28,13 @@ public class DetalleVenta {
         this.productos = productos;
     }
 
+    public DetalleVenta(int idDetalleVenta, Venta venta, List<Producto> productos) {
+        this.idDetalleVenta = idDetalleVenta;
+        this.venta = venta;
+        this.productos = productos;
+    }
+    
+
     public DetalleVenta(int idDetalleVenta, Venta venta, List<Producto> productos, double precioVenta) {
         this.idDetalleVenta = idDetalleVenta;
         this.venta = venta;
